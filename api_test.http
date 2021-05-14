@@ -1,13 +1,15 @@
+// Server health check
 GET http://localhost:4000/health
 
 ###
+// User signup
 POST http://localhost:4000/user/signup
 Content-Type: "application/json"
 
 {
     "user": {
         "name": "apitest",
-        "email": "apitest7",
+        "email": "apitest8",
         "password": "apitest",
         "orgId": "4df5fff1-6a93-4619-85da-04d0e954a5cf"
     },
@@ -15,4 +17,9 @@ Content-Type: "application/json"
 }
 
 ###
+// GetUserById
 GET http://localhost:4000/user/08c23b25-8dad-49e2-a4f1-1d3dcd47386e
+
+###
+// GetOrgById
+GET http://localhost:4000/org/4df5fff1-6a93-4619-85da-04d0e954a5cf

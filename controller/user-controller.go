@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	svc service.UserService = service.NewUserService()
+	userSVC service.UserService = service.NewUserService()
 )
 
 func Health(w http.ResponseWriter, r *http.Request) {
@@ -26,11 +26,11 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	if err = json.NewDecoder(r.Body).Decode(&u); err != nil {
 		fmt.Println("errr ", err)
-		// app.RespondWithError(w, http.StatusBadRequest, err.Error())
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	defer r.Body.Close()
-	if user, err = svc.Signup(&u); err != nil {
+	if user, err = userSVC.Signup(&u); err != nil {
 		RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -43,7 +43,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	var user *model.User
 	var err error
 
-	if user, err = svc.GetUserById(userId); err != nil {
+	if user, err = userSVC.GetUserById(userId); err != nil {
 		RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

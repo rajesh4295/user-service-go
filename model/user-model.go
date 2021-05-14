@@ -1,7 +1,10 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/gofrs/uuid"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -20,14 +23,34 @@ type User struct {
 	Base
 }
 
-func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
-	id, _ := uuid.NewV4()
-	u.Base.ID = id
-	// u.Password = app.HashPwd([]byte(u.Password))
-	return
-}
-
 type Signup struct {
 	User    User
 	OrgName string `json:"orgName"`
+}
+
+type Login struct {
+	N ame     string
+	Password string
+}
+
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	id, _ := uuid.NewV4()
+	u.Base.ID = id
+	u.Password = HashPwd([]byte(u.Password))
+	return
+}
+
+func HashPwd(pwd []byte) string {
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.DefaultCost)
+	if err != nil {
+		fmt.Println("failed to hash password: ", err)
+	}
+	return string(hash)
+}
+
+func ComparePwd(hash string, pwd []byte) bool {
+	byteHash := []byte(hash)
+
+	err := bcrypt.CompareHashAndPassword(byteHash, pwd)
+	return err == nil
 }

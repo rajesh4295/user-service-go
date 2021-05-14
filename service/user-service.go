@@ -10,21 +10,21 @@ type UserService interface {
 	GetUserById(id string) (*model.User, error)
 }
 
-type service struct {
+type userService struct {
 }
 
 var (
-	db database.Provider = database.NewPG()
+	Db database.Provider = database.NewPG()
 )
 
 func NewUserService() UserService {
-	return &service{}
+	return &userService{}
 }
 
-func (s *service) Signup(u *model.Signup) (*model.User, error) {
-	return db.Signup(u)
+func (s *userService) Signup(u *model.Signup) (*model.User, error) {
+	return Db.Signup(u)
 }
 
-func (s *service) GetUserById(id string) (*model.User, error) {
-	return db.GetUserById(id)
+func (s *userService) GetUserById(id string) (*model.User, error) {
+	return Db.GetUserById(id)
 }

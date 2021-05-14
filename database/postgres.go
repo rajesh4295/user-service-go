@@ -75,6 +75,15 @@ func (pg *Postgres) CreateOrg(org *model.Org) (*model.Org, error) {
 	return org, nil
 }
 
+func (pg *Postgres) GetOrgById(id string) (*model.Org, error) {
+	var org *model.Org
+	if e := pg.Db.First(&org, "id = ?", id).Error; e != nil {
+		return nil, e
+	}
+
+	return org, nil
+}
+
 func (pg *Postgres) Signup(u *model.Signup) (*model.User, error) {
 	var e error
 	tx := pg.Db.Begin()

@@ -18,7 +18,7 @@ func main() {
 	initApp()
 	initRoutes()
 
-	mainRouter.Serve(en)
+	mainRouter.Serve()
 }
 
 func initApp() {
@@ -34,4 +34,7 @@ func initRoutes() {
 	userRouter := mainRouter.RegisterSubRoute("/user")
 	userRouter.Post("/signup", controller.Signup)
 	userRouter.Get("/{id}", controller.GetUserById)
+
+	orgRouter := mainRouter.RegisterSubRoute("/org")
+	orgRouter.Get("/{id}", controller.GetOrgById)
 }

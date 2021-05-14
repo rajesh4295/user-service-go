@@ -13,6 +13,10 @@ type MuxRouter struct {
 	router *mux.Router
 }
 
+var (
+	Env env.Provider = env.NewEnv()
+)
+
 func NewMuxRouter() Router {
 	return &MuxRouter{router: mux.NewRouter()}
 }
@@ -30,7 +34,7 @@ func (mx *MuxRouter) RegisterSubRoute(path string) Router {
 	return &MuxRouter{router: subRouter}
 }
 
-func (mx *MuxRouter) Serve(env env.Provider) {
-	fmt.Printf("Server starting on %v:%v", env.Get("HOST"), env.Get("PORT"))
-	log.Fatal(http.ListenAndServe(fmt.Sprintf("%v:%v", env.Get("HOST"), env.Get("PORT")), mx.router))
+func (mx *MuxRouter) Serve() {
+	fmt.Printf("Server starting on %v:%v", Env.Get("HOST"), Env.Get("PORT"))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%v:%v", Env.Get("HOST"), Env.Get("PORT")), mx.router))
 }
