@@ -8,6 +8,10 @@ import (
 	"github.com/rajesh4295/user-service-go/service"
 )
 
+/*
+ *	Org controller layer to accept request from exposed API and pass it org service layer
+**/
+
 var (
 	orgSVC service.OrgService = service.NewOrgService()
 )

@@ -14,16 +14,18 @@ import (
 
 var instance *Postgres
 
+/*
+ *	User and Org business layer to accept request from service layer and persist in database.
+**/
+
 type Postgres struct {
 	Db *gorm.DB
 }
 
 func NewPG() *Postgres {
 	if instance != nil {
-		fmt.Println("db instance exists")
 		return instance
 	}
-	fmt.Println("new db instance")
 	instance = &Postgres{}
 	return instance
 }
@@ -63,7 +65,7 @@ func (pg *Postgres) GetUserById(id string) (*model.User, error) {
 	if e := pg.Db.First(&user, "id = ?", id).Error; e != nil {
 		return nil, e
 	}
-
+	user.Password = ""
 	return user, nil
 }
 
@@ -72,7 +74,6 @@ func (pg *Postgres) GetUserByName(name string) (*model.User, error) {
 	if e := pg.Db.Where(&model.User{Name: name}).First(&user).Error; e != nil {
 		return nil, e
 	}
-
 	return user, nil
 }
 
@@ -81,7 +82,6 @@ func (pg *Postgres) GetUserByEmail(email string) (*model.User, error) {
 	if e := pg.Db.Where(&model.User{Email: email}).First(&user).Error; e != nil {
 		return nil, e
 	}
-
 	return user, nil
 }
 

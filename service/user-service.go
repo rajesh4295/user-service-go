@@ -11,6 +11,9 @@ type UserService interface {
 	GetUserById(id string) (*model.User, error)
 }
 
+/*
+ *	User service layer to help interaction between user controller and databse.
+**/
 type userService struct {
 }
 

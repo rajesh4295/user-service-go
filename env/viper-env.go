@@ -23,12 +23,16 @@ func NewEnv() *ViperEnv {
 }
 
 func (v *ViperEnv) Init() error {
-	pflag.String("mode", "dev", "Microservice run mode")
+	pflag.String("mode", "dev", "Microservice run mode. dev/prod")
 	pflag.Parse()
 	viper.AddConfigPath("")
 	v.Env.BindPFlags(pflag.CommandLine)
 
 	envMode := v.Env.GetString("mode")
+
+	if envMode != "dev" && envMode != "prod" {
+		log.Fatal("Invalid run mode. Allowed modes are dev and prod")
+	}
 
 	var configFile string = fmt.Sprintf("config.%v", envMode)
 

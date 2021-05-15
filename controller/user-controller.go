@@ -10,6 +10,10 @@ import (
 	"github.com/rajesh4295/user-service-go/service"
 )
 
+/*
+ *	User controller layer to accept request from exposed API and pass it user service layer
+**/
+
 var (
 	userSVC service.UserService = service.NewUserService()
 )

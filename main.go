@@ -22,9 +22,11 @@ func main() {
 }
 
 func initApp() {
+	// Init environment provider
 	en.Init()
+	// Connect database
 	db.Connect(en)
-
+	// Init service
 	service.NewUserService()
 }
 

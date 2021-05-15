@@ -8,12 +8,11 @@ type OrgService interface {
 	GetOrgById(id string) (*model.Org, error)
 }
 
+/*
+ *	Org service layer to help interaction between org controller and databse.
+**/
 type orgService struct {
 }
-
-// var (
-// 	db database.Provider = database.NewPG()
-// )
 
 func NewOrgService() OrgService {
 	return &orgService{}
