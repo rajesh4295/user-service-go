@@ -67,6 +67,24 @@ func (pg *Postgres) GetUserById(id string) (*model.User, error) {
 	return user, nil
 }
 
+func (pg *Postgres) GetUserByName(name string) (*model.User, error) {
+	var user *model.User
+	if e := pg.Db.Where(&model.User{Name: name}).First(&user).Error; e != nil {
+		return nil, e
+	}
+
+	return user, nil
+}
+
+func (pg *Postgres) GetUserByEmail(email string) (*model.User, error) {
+	var user *model.User
+	if e := pg.Db.Where(&model.User{Email: email}).First(&user).Error; e != nil {
+		return nil, e
+	}
+
+	return user, nil
+}
+
 func (pg *Postgres) CreateOrg(org *model.Org) (*model.Org, error) {
 	if e := pg.Db.Create(&org).Error; e != nil {
 		return nil, e
@@ -86,31 +104,60 @@ func (pg *Postgres) GetOrgById(id string) (*model.Org, error) {
 
 func (pg *Postgres) Signup(u *model.Signup) (*model.User, error) {
 	var e error
+	var user *model.User
 	tx := pg.Db.Begin()
 	// create new user in existing org
 	if u.User.OrgID != uuid.FromStringOrNil("") {
-		if _, e = pg.CreateUser(&u.User); e != nil {
+		if user, e = pg.CreateUser(&u.User); e != nil {
 			tx.Rollback()
-			return &u.User, e
+			user.Password = ""
+			return user, e
 		}
 	} else {
 		// create new user in new org
 		if u.OrgName == "" {
-			return &u.User, errors.New("org name is required")
+			return nil, errors.New("org name is required")
 		}
 		org := &model.Org{Name: u.OrgName}
 		if _, e = pg.CreateOrg(org); e != nil {
 			tx.Rollback()
-			return &u.User, e
+			return nil, e
 		}
 
 		u.User.OrgID = org.Base.ID
-		if _, e = pg.CreateUser(&u.User); e != nil {
+		if user, e = pg.CreateUser(&u.User); e != nil {
 			tx.Rollback()
-			return &u.User, e
+			return nil, e
 		}
 	}
 
 	tx.Commit()
-	return &u.User, nil
+	user.Password = ""
+	return user, nil
+}
+
+func (pg *Postgres) Login(u *model.Login) (*model.User, error) {
+	var user *model.User
+	var err error
+
+	if u.Password == "" {
+		return nil, errors.New("password is required")
+	}
+
+	if u.Email != "" {
+		user, err = pg.GetUserByEmail(u.Email)
+	} else if u.Name != "" {
+		user, err = pg.GetUserByName(u.Name)
+	} else {
+		return nil, errors.New("name or email is required")
+	}
+
+	if err != nil {
+		return nil, errors.New("user doesn't exists")
+	}
+	if model.ComparePwd(user.Password, []byte(u.Password)) {
+		user.Password = ""
+		return user, nil
+	}
+	return nil, errors.New("invalid password")
 }

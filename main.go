@@ -33,6 +33,7 @@ func initRoutes() {
 
 	userRouter := mainRouter.RegisterSubRoute("/user")
 	userRouter.Post("/signup", controller.Signup)
+	userRouter.Post("/login", controller.Login)
 	userRouter.Get("/{id}", controller.GetUserById)
 
 	orgRouter := mainRouter.RegisterSubRoute("/org")

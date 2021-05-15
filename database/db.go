@@ -11,9 +11,12 @@ type Provider interface {
 	// user
 	CreateUser(u *model.User) (*model.User, error)
 	GetUserById(id string) (*model.User, error)
+	GetUserByName(id string) (*model.User, error)
+	GetUserByEmail(id string) (*model.User, error)
 	// org
 	CreateOrg(o *model.Org) (*model.Org, error)
 	GetOrgById(id string) (*model.Org, error)
 	// usecase
 	Signup(u *model.Signup) (*model.User, error)
+	Login(u *model.Login) (*model.User, error)
 }

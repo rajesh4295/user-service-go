@@ -8,12 +8,22 @@ Content-Type: "application/json"
 
 {
     "user": {
-        "name": "apitest",
-        "email": "apitest8",
-        "password": "apitest",
-        "orgId": "4df5fff1-6a93-4619-85da-04d0e954a5cf"
+        "name": "test5",
+        "email": "test5",
+        "password": "test",
+        "orgId": "b0cec438-0af6-4fa1-b1fb-db0e2f7e1bca"
     },
-    "orgName": "apitest"
+    "orgName": "test"
+}
+
+###
+// User login
+POST http://localhost:4000/user/login
+Content-Type: "application/json"
+
+{
+    "name": "test5",
+    "password": "test"
 }
 
 ###

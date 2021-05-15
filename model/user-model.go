@@ -15,9 +15,9 @@ type Base struct {
 }
 
 type User struct {
-	Name     string    `json:"name"`
+	Name     string    `gorm:"unique" json:"name"`
 	Email    string    `gorm:"unique" json:"email"`
-	Password string    `json:"-"`
+	Password string    `json:"password,omitempty"`
 	OrgID    uuid.UUID `json:"orgId"`
 	Org      Org       `json:"-"`
 	Base
@@ -29,7 +29,8 @@ type Signup struct {
 }
 
 type Login struct {
-	N ame     string
+	Name     string
+	Email    string
 	Password string
 }
 
